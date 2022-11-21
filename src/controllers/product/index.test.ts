@@ -31,7 +31,7 @@ describe('Product Controller', () => {
       const insertProductSpy = jest.spyOn(controller, 'insertProduct');
       const doc = await controller.insertProduct({} as ProductType);
       console.log(doc);
-      expect(insertProductSpy).toThrowError();
+      expect(insertProductSpy).toThrow();
     });
   });
 });
