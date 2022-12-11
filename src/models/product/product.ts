@@ -1,14 +1,11 @@
-import {
-  HydratedDocument,
-  Model,
-  InferSchemaType,
-  Schema,
-  model
-} from 'mongoose';
+import { HydratedDocument, InferSchemaType, Schema, model } from 'mongoose';
 
 const ProductSchema = new Schema(
   {
-    id: Number,
+    id: {
+      type: Number,
+      unique: true
+    },
     title: {
       type: String,
       required: true
@@ -34,7 +31,13 @@ const ProductSchema = new Schema(
       }
     }
   },
-  { collation: { locale: 'en-US', strength: 1 } }
+  {
+    collation: {
+      locale: 'en_US',
+      strength: 1
+    },
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
+  }
 );
 
 type ProductType = InferSchemaType<typeof ProductSchema>;

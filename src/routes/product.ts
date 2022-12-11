@@ -1,21 +1,48 @@
-import { Router, Request, Response } from 'express';
-import { IParams, IRequest, IResponse } from '../models/product/types';
-import { ProductType } from '../models/product/product';
+import { Router, NextFunction } from 'express';
+import { IRequest, IResponse } from '@common/types';
+import { ProductType } from '@models/product/product';
 import { insertProduct } from '@controllers/product';
+import { getAllProducts } from '@models/product/query';
+import { Document } from 'mongoose';
 
-const productRouter = Router();
+const productRoute = Router();
 
-productRouter.get('/', (req: Request, res: Response) => {
-  //const products =
-  //res.status(200).send(products)
+productRoute.get<
+  never,
+  IResponse<ReadonlyArray<Document>>,
+  never,
+  never,
+  NextFunction
+>('/', async (req, res, next) => {
+  try {
+    const products = await getAllProducts();
+    return res
+      .status(201)
+      .send({ data: products, message: 'Product saved successfully' });
+  } catch (error) {
+    next(error);
+  }
 });
 
-productRouter.post<never, any, IRequest<ProductType>, never>(
-  '/',
-  (req, res) => {
-    const product = req.body.data;
-    const headers = req.headers;
-    console.log(headers);
-    const createdProduct = insertProduct(product);
+productRoute.post<
+  never,
+  IResponse<Document>,
+  IRequest<ProductType>,
+  never,
+  NextFunction
+>('/', async (req, res, next) => {
+  try {
+    const product = req.body?.data;
+    const doc = await insertProduct(product);
+
+    return doc
+      ? res
+          .status(201)
+          .send({ data: doc, message: 'Product saved successfully' })
+      : res.status(400);
+  } catch (error) {
+    next(error);
   }
-);
+});
+
+export { productRoute };

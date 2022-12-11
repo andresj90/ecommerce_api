@@ -1,5 +1,8 @@
-import { HydratedDocument, ProductType } from "./product";
+import { HydratedDocument, ProductType, ProductModel } from './product';
 
-const insertNewProduct = (product: HydratedDocument<ProductType>) => product.save();
+const insertNewProduct = (product: HydratedDocument<ProductType>) =>
+  product.save({ checkKeys: true });
 
-export { insertNewProduct }
+const getAllProducts = async () => ProductModel.find();
+
+export { insertNewProduct, getAllProducts };
