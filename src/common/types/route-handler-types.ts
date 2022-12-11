@@ -1,13 +1,12 @@
-
 export interface IResponse<T> {
-    data: T;
-    message: string;
+  data: T;
+  message: string;
 }
 
 export interface IRequest<T> {
-    data: T;
+  data: T;
 }
 
 export interface IParams {
-    id: number
+  id: number;
 }
