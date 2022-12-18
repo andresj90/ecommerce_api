@@ -1,4 +1,10 @@
-import { HydratedDocument, InferSchemaType, Schema, model } from 'mongoose';
+import {
+  HydratedDocument,
+  InferSchemaType,
+  ObjectId,
+  Schema,
+  model
+} from 'mongoose';
 
 const ProductSchema = new Schema(
   {
@@ -44,4 +50,4 @@ type ProductType = InferSchemaType<typeof ProductSchema>;
 
 const ProductModel = model('Product', ProductSchema);
 
-export { ProductModel, HydratedDocument, ProductType };
+export { ProductModel, HydratedDocument, ProductType, ObjectId };

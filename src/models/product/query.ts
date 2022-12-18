@@ -1,4 +1,9 @@
-import { HydratedDocument, ProductType, ProductModel } from './product';
+import {
+  HydratedDocument,
+  ObjectId,
+  ProductModel,
+  ProductType
+} from './product';
 
 const insertNewProduct = (product: HydratedDocument<ProductType>) =>
   product.save({ checkKeys: true });
@@ -12,4 +17,16 @@ const updateProductById = async (product: HydratedDocument<ProductType>) =>
     new: true
   });
 
-export { insertNewProduct, getAllProducts, updateProductById };
+const deleteProductById = async (id?: ObjectId) => {
+  if (id) {
+    return ProductModel.findByIdAndDelete(id);
+  }
+  return null;
+};
+
+export {
+  deleteProductById,
+  getAllProducts,
+  insertNewProduct,
+  updateProductById
+};

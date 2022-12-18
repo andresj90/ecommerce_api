@@ -1,8 +1,12 @@
-import { Router, NextFunction } from 'express';
 import { IRequest, IResponse } from '@common/types';
-import { ProductType } from '@models/product/product';
 import { insertProduct } from '@controllers/product';
-import { getAllProducts, updateProductById } from '@models/product/query';
+import { ProductType } from '@models/product/product';
+import {
+  deleteProductById,
+  getAllProducts,
+  updateProductById
+} from '@models/product/query';
+import { NextFunction, Router } from 'express';
 import { Document, HydratedDocument } from 'mongoose';
 
 const productRoute = Router();
@@ -39,7 +43,7 @@ productRoute.get<
     const products = await getAllProducts();
     return res
       .status(201)
-      .send({ data: products, message: 'Product saved successfully' });
+      .send({ data: products, message: `products found ${products.length}` });
   } catch (error) {
     next(error);
   }
@@ -51,7 +55,7 @@ productRoute.put<
   IRequest<HydratedDocument<ProductType>>,
   never,
   NextFunction
->('/:_id', async (req, res, next) => {
+>('/:id', async (req, res, next) => {
   try {
     const product = req.body.data;
     const updatedProduct = await updateProductById(product);
@@ -65,4 +69,25 @@ productRoute.put<
     next(error);
   }
 });
+
+productRoute.delete<
+  never,
+  IResponse<Document | null>,
+  never,
+  never,
+  NextFunction
+>('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const doc = await deleteProductById(id);
+    doc
+      ? res
+          .status(200)
+          .send({ data: doc, message: 'Product successfully removed' })
+      : res.status(204).send({ data: doc, message: 'Product Not found' });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export { productRoute };
