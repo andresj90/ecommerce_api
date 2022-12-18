@@ -5,4 +5,11 @@ const insertNewProduct = (product: HydratedDocument<ProductType>) =>
 
 const getAllProducts = async () => ProductModel.find();
 
-export { insertNewProduct, getAllProducts };
+const updateProductById = async (product: HydratedDocument<ProductType>) =>
+  ProductModel.findByIdAndUpdate(product._id, product, {
+    timestamps: true,
+    upsert: false,
+    new: true
+  });
+
+export { insertNewProduct, getAllProducts, updateProductById };
