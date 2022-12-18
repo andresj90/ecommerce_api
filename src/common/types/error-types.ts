@@ -1,4 +1,5 @@
 export enum ErrorName {
   ValidationError = 'ValidationError',
-  MongoServerError = 'MongoServerError'
+  MongoServerError = 'MongoServerError',
+  TypeError = 'TypeError'
 }
