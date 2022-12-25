@@ -4,6 +4,7 @@ import { ProductType } from '@models/product/product';
 import {
   deleteProductById,
   getAllProducts,
+  getProductById,
   updateProductById
 } from '@models/product/query';
 import { NextFunction, Router } from 'express';
@@ -49,6 +50,20 @@ productRoute.get<
   }
 });
 
+productRoute.get<never, IResponse<Document | null>, never, never, NextFunction>(
+  '/:id',
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const doc = await getProductById(id);
+      const message = doc ? 'Product found' : 'Product not found';
+      res.status(200).send({ data: doc, message });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 productRoute.put<
   never,
   IResponse<Document | null>,
@@ -59,6 +74,7 @@ productRoute.put<
   try {
     const product = req.body.data;
     const updatedProduct = await updateProductById(product);
+    res.contentType('application/json');
     return res.status(200).send({
       data: updatedProduct,
       message: updatedProduct

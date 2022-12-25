@@ -24,9 +24,17 @@ const deleteProductById = async (id?: ObjectId) => {
   return null;
 };
 
+const getProductById = async (id?: ObjectId) => {
+  if (id) {
+    return ProductModel.findById(id);
+  }
+  return null;
+};
+
 export {
   deleteProductById,
   getAllProducts,
+  getProductById,
   insertNewProduct,
   updateProductById
 };
