@@ -1,14 +1,19 @@
-import mongoose from 'mongoose';
+/* eslint-disable no-console */
 import config from 'config';
+import mongoose from 'mongoose';
 
 const host = config.has('database.host') ? config.get('database.host') : null;
 const port = config.has('database.port') ? config.get('database.port') : null;
 const name = config.has('database.name') ? config.get('database.name') : null;
 
-// eslint-disable-next-line no-console
-console.log({ env: process.env.NODE_ENV, host, port, name });
-
 const DB_CONNECTION = `mongodb://${host}:${port}/${name}`;
+console.log({
+  env: process.env.NODE_ENV,
+  host,
+  port,
+  name,
+  connectionURI: DB_CONNECTION
+});
 
 const startDatabase = async (): Promise<void> => {
   try {
@@ -17,15 +22,13 @@ const startDatabase = async (): Promise<void> => {
       autoIndex: true
     });
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.log('error');
     if (error instanceof Error) {
       console.error(error);
     }
   }
 };
-// eslint-disable-next-line no-console
+
 mongoose.connection.on('open', () => console.log('Connected to DB'));
-// eslint-disable-next-line no-console
 mongoose.connection.on('disconnected', () => console.log('Disconnected to DB'));
 export { startDatabase };

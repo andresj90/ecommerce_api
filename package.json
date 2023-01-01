@@ -7,7 +7,7 @@
     "build": "rimraf ./build && tsc -p tsconfig.build.json",
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix",
-    "format": "prettier --config .prettierrc 'src/**/*.{ts,tsx}' --write",
+    "format": "prettier --config .prettierrc \"src/**/*.ts\" --write",
     "prepare": "husky install"
   },
   "devDependencies": {
@@ -27,7 +27,7 @@
     "nodemon": "^2.0.19",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
-    "supertest": "^6.2.4",
+    "supertest": "^6.3.3",
     "ts-jest": "^28.0.8",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.0",
