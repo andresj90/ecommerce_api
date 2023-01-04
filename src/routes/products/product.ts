@@ -21,13 +21,11 @@ productRoute.post<
 >('/', async (req, res, next) => {
   try {
     const product = req.body?.data;
-    const doc = await insertProduct(product);
+    const data = await insertProduct(product);
+    const statusCode = data ? 201 : 204;
+    const message = data ? 'Product successfully saved' : 'Product not saved';
 
-    return doc
-      ? res
-          .status(201)
-          .send({ data: doc, message: 'Product saved successfully' })
-      : res.status(400);
+    res.status(statusCode).send({ data, message }).end();
   } catch (error) {
     next(error);
   }
@@ -42,9 +40,11 @@ productRoute.get<
 >('/', async (req, res, next) => {
   try {
     const products = await getAllProducts();
-    return res
-      .status(201)
-      .send({ data: products, message: `products found ${products.length}` });
+
+    res
+      .status(200)
+      .send({ data: products, message: `products found ${products.length}` })
+      .end();
   } catch (error) {
     next(error);
   }
@@ -55,9 +55,10 @@ productRoute.get<never, IResponse<Document | null>, never, never, NextFunction>(
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const doc = await getProductById(id);
-      const message = doc ? 'Product found' : 'Product not found';
-      res.status(200).send({ data: doc, message });
+      const data = await getProductById(id);
+      const message = data ? 'Product found' : 'Product not found';
+
+      res.status(200).send({ data, message }).end();
     } catch (error) {
       next(error);
     }
@@ -73,14 +74,17 @@ productRoute.put<
 >('/:id', async (req, res, next) => {
   try {
     const product = req.body.data;
-    const updatedProduct = await updateProductById(product);
-    res.contentType('application/json');
-    return res.status(200).send({
-      data: updatedProduct,
-      message: updatedProduct
-        ? 'Product successfully updated'
-        : 'Product not found'
-    });
+    const data = await updateProductById(product);
+    const statusCode = data ? 200 : 204;
+    const message = data ? 'Product successfully updated' : 'Product not found';
+
+    return res
+      .status(statusCode)
+      .send({
+        data,
+        message
+      })
+      .end();
   } catch (error) {
     next(error);
   }
@@ -95,12 +99,11 @@ productRoute.delete<
 >('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
-    const doc = await deleteProductById(id);
-    doc
-      ? res
-          .status(200)
-          .send({ data: doc, message: 'Product successfully removed' })
-      : res.status(204).send({ data: doc, message: 'Product Not found' });
+    const data = await deleteProductById(id);
+    const message = data ? 'Product successfully removed' : 'Product not found';
+    const statusCode = data ? 200 : 204;
+
+    res.status(statusCode).send({ data, message }).end();
   } catch (error) {
     next(error);
   }

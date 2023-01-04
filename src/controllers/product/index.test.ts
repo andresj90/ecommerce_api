@@ -1,10 +1,13 @@
 import { ProductType } from '@models/product/product';
 import {
+  clearDatabase,
   connect,
-  disconnect,
-  clearDatabase
+  disconnect
 } from '../../db/mock-db-connection';
-import { newProduct, productWithRequiredFields } from './__data__/';
+import {
+  newProduct,
+  productWithRequiredFields
+} from '../../routes/products/product.mockData';
 import * as controller from './index';
 
 describe('Product Controller', () => {
@@ -24,13 +27,13 @@ describe('Product Controller', () => {
     });
     it('should create with required fields only', async () => {
       const doc = await controller.insertProduct(productWithRequiredFields);
-      console.log(doc);
+
       expect(doc).toHaveProperty('_id');
     });
     it('should reject if object has not required fields', async () => {
       const insertProductSpy = jest.spyOn(controller, 'insertProduct');
-      const doc = await controller.insertProduct({} as ProductType);
-      console.log(doc);
+      await controller.insertProduct({} as ProductType);
+
       expect(insertProductSpy).toThrow();
     });
   });
