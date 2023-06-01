@@ -8,26 +8,26 @@ const name = config.has('database.name') ? config.get('database.name') : null;
 
 const DB_CONNECTION = `mongodb://${host}:${port}/${name}`;
 console.log({
-  env: process.env.NODE_ENV,
-  host,
-  port,
-  name,
-  connectionURI: DB_CONNECTION
+    env: process.env.NODE_ENV,
+    host,
+    port,
+    name,
+    connectionURI: DB_CONNECTION
 });
 
-const startDatabase = async (): Promise<void> => {
-  try {
-    await mongoose.connect(DB_CONNECTION, {
-      connectTimeoutMS: 500,
-      autoIndex: true
-    });
-  } catch (error) {
-    console.log('error');
-    if (error instanceof Error) {
-      console.error(error);
+async function startDatabase(): Promise<void> {
+    try {
+        await mongoose.connect(DB_CONNECTION, {
+            connectTimeoutMS: 500,
+            autoIndex: true
+        });
+    } catch (error) {
+        console.log('error');
+        if (error instanceof Error) {
+            console.error(error);
+        }
     }
-  }
-};
+}
 
 mongoose.connection.on('open', () => console.log('Connected to DB'));
 mongoose.connection.on('disconnected', () => console.log('Disconnected to DB'));
